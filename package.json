@@ -2,7 +2,7 @@
   "name": "istock",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://jayeshakbari.github.io/istocks",
+  "homepage": "https://gurudevinformatics.com/fetch/",
   "dependencies": {
     "downshift": "^1.25.0",
     "gh-pages": "^1.1.0",
