@@ -3,11 +3,6 @@ import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
 import SuperSelectField from 'material-ui-superselectfield';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import AutoComplete from 'material-ui/AutoComplete';
-
- 
-
-  
 
 export default class Pod extends Component{
     constructor(){
@@ -53,7 +48,6 @@ export default class Pod extends Component{
     };
     
     handleSelection = (values, name) =>{
-      
       this.nameChange(values);
       this.setState({ 
         [name]: values
@@ -74,7 +68,7 @@ export default class Pod extends Component{
         }
         else{
           this.setState({
-            pod: this.state.pod.concat([{name:values[l].value,buy:'',sl:'',t1:'',t2:''}])
+            pod: this.state.pod.concat([{name:values[l].value,buy:'',sell:'',sl:'',t1:'',t2:'',link:''}])
           })
         }
       }
@@ -90,7 +84,13 @@ export default class Pod extends Component{
       });
       this.setState({ pod: newpod });
     }
-
+    sellChange = (idx) => (evt) => {
+      const newpod = this.state.pod.map((p, sidx) => {
+        if (idx !== sidx) return p;
+        return { ...p, sell: evt.target.value };
+      });
+      this.setState({ pod: newpod });
+    }
     slChange = (idx) => (evt) => {
       const newpod = this.state.pod.map((p, sidx) => {
         if (idx !== sidx) return p;
@@ -98,7 +98,6 @@ export default class Pod extends Component{
       });
       this.setState({ pod: newpod });
     }
-
     t1Change = (idx) => (evt) => {
       const newpod = this.state.pod.map((p, sidx) => {
         if (idx !== sidx) return p;
@@ -106,7 +105,6 @@ export default class Pod extends Component{
       });
       this.setState({ pod: newpod });
     }
-
     t2Change = (idx) => (evt) => {
       const newpod = this.state.pod.map((p, sidx) => {
         if (idx !== sidx) return p;
@@ -114,13 +112,43 @@ export default class Pod extends Component{
       });
       this.setState({ pod: newpod });
     }
-  
-    handleSubmit = (evt) => {
-      const {pod} = this.state;
-      console.log(pod.map(p=>p))
-      alert(`${pod.length}`);
+    linkChange = (idx) => (evt) => {
+      const newpod = this.state.pod.map((p, sidx) => {
+        if (idx !== sidx) return p;
+        return { ...p, link: evt.target.value };
+      });
+      this.setState({ pod: newpod });
     }
   
+    handleSubmit = async (evt) => {
+      const {pod} = this.state;
+      let p =JSON.stringify(pod);
+      fetch('http://localhost:81/fetch/podPush.php', {
+          method: 'POST',
+          headers: { "Content-type": "application/x-www-form-urlencoded"},
+          body: p
+        })
+        .then((res) => res.json())
+        .then((data) => console.log(data))
+        .catch((err) => console.log("Fetch error: " + err))
+    }
+    addPost= async(e)=>{
+      const {pod} = this.state;
+      e.preventDefault();
+      let p =JSON.stringify(pod);
+      fetch('http://localhost:81/fetch/podPush.php', {
+          method: 'POST',
+          headers: { "Content-type": "application/x-www-form-urlencoded"},
+          body: p
+        })
+        .then((res) => res.json())
+        .then((data) => console.log(data))
+        .catch((err) => console.log("Fetch error: " + err))
+      this.setState({
+      pod:[],
+      selectedSymbol:[],
+      })
+    }
     selectionsRenderer = (values, hintText, name) => {
       const { isFetchingSymbol} = this.state
   
@@ -173,21 +201,27 @@ export default class Pod extends Component{
               </h1>
             </div>
             <div>
-              <form  style={{ marginBottom: 40 }} onSubmit={this.handleSubmit}>   
+              <form  style={{ marginBottom: 40 }}  >   
                   
                   {
                     this.state.pod.map((p,idx)=>(
                       <div  style={{ justifyContent: 'left'}}>
                         <TextField style={{marginRight:10}} disabled={true} hintText={p.name} defaultValue={p.name} />
-                        <TextField style={{width:50,marginRight:10}} type="text" name={`Buy-${idx + 1}`} floatingLabelText="Buy" floatingLabelFixed="true" hintText={p.buy} defaultValue={p.buy} onChange={this.buyChange(idx)} />
-                        <TextField style={{width:50,marginRight:10}} type="text" name={`Sl-${idx + 1}`} floatingLabelText="SL" floatingLabelFixed="true" hintText={p.sl} defaultValue={p.sl} onChange={this.slChange(idx)} />
-                        <TextField style={{width:50,marginRight:10}} type="text" name={`Target1-${idx + 1}`} floatingLabelText="Target 1" floatingLabelFixed="true" hintText={p.t1} defaultValue={p.t1} onChange={this.t1Change(idx)} />
-                        <TextField style={{width:50,marginRight:10}} type="text" name={`Target2-${idx + 1}`} floatingLabelText="Target 2" floatingLabelFixed="true" hintText={p.t2} defaultValue={p.t2} onChange={this.t2Change(idx)} />
+                        <TextField style={{width:100,marginRight:10}} type="text" name={`Buy-${idx + 1}`} floatingLabelText="Buy" floatingLabelFixed="true" hintText={p.buy} defaultValue={p.buy} onChange={this.buyChange(idx)} />
+                        <TextField style={{width:100,marginRight:10}} type="text" name={`Sell-${idx + 1}`} floatingLabelText="Sell" floatingLabelFixed="true" hintText={p.sell} defaultValue={p.sell} onChange={this.sellChange(idx)} />
+                        <TextField style={{width:100,marginRight:10}} type="text" name={`Sl-${idx + 1}`} floatingLabelText="SL" floatingLabelFixed="true" hintText={p.sl} defaultValue={p.sl} onChange={this.slChange(idx)} />
+                        <TextField style={{width:100,marginRight:10}} type="text" name={`Target1-${idx + 1}`} floatingLabelText="Target 1" floatingLabelFixed="true" hintText={p.t1} defaultValue={p.t1} onChange={this.t1Change(idx)} />
+                        <TextField style={{width:100,marginRight:10}} type="text" name={`Target2-${idx + 1}`} floatingLabelText="Target 2" floatingLabelFixed="true" hintText={p.t2} defaultValue={p.t2} onChange={this.t2Change(idx)} />
+                        <TextField style={{width:100,marginRight:10}} type="text" name={`Target2-${idx + 1}`} floatingLabelText="Chart Link" floatingLabelFixed="true" hintText={p.link} defaultValue={p.link} onChange={this.linkChange(idx)} />
+                        
                         <button type="button" onClick={this.handleRemovePod(idx)} className="small">-</button>
                       </div>
                     ))
                   }
-                  <RaisedButton label="Submit" type="submit" />
+                  {
+                  (this.state.pod.length !== 0)?<RaisedButton secondary={true} onClick={this.addPost.bind(this)} label="Submit" type="submit" />:<RaisedButton secondary={true} disabled={true} label="Submit" type="submit" />
+                  }
+   
               </form>
             </div>
             </div>

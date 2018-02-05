@@ -11,23 +11,11 @@ import History from './components/History';
 //import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 
-const styles = {
-  headline: {
-    fontSize: 24,
-    paddingTop: 16,
-    marginBottom: 12,
-    fontWeight: 400,
-  },
-  slide: {
-    padding: 10,
-  },
-};
-
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      slideIndex: 0,
+      slideIndex: 1,
     };
   }
   handleChange = (value) => {
@@ -48,7 +36,7 @@ class App extends Component {
               value={this.state.slideIndex}
               >
                 <Tab label="Select sybmol and send" value={0} />
-                <Tab label="Tab Two" value={1} />
+                <Tab label="History Pod" value={1} />
               </Tabs>
               <SwipeableViews
                 index={this.state.slideIndex}
