@@ -1,7 +1,9 @@
 let rows=[];
 class RowApi {
+
     static getRows(tableState) {
-        const url='https://gurudevinformatics.com/fetch/podHis.php';
+        return new Promise((resolve, reject) => {
+          const url='https://gurudevinformatics.com/fetch/podHis.php';
           fetch(url)
           .then(res => res.json())
           .then(da => {
@@ -10,14 +12,13 @@ class RowApi {
           .catch((error) => {
           console.error(error);
           });
-        return new Promise((resolve, reject) => {
-    
           setTimeout(() => {   
             const updatedState = Object.assign({}, tableState);
     
             let searchRange = rows.slice(updatedState.numberOfRows * updatedState.page - updatedState.numberOfRows, updatedState.numberOfRows * updatedState.page);
     
             updatedState.rows = searchRange;
+            updatedState.dataDup = rows;
             updatedState.total = rows.length;
             updatedState.numberOfRows = updatedState.numberOfRows;
             resolve(updatedState);
