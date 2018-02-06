@@ -1,7 +1,7 @@
 let rows=[];
 class RowApi {
     static getRows(tableState) {
-        const url='http://localhost:81/fetch/podHis.php';
+        const url='https://gurudevinformatics.com/fetch/podHis.php';
           fetch(url)
           .then(res => res.json())
           .then(da => {

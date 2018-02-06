@@ -47,7 +47,7 @@ export default class History extends Component{
     let p=[{'id':idx,'ta':target_r}];
     console.log(p)
     let ta= JSON.stringify(p);
-    fetch('http://localhost:81/fetch/tA.php', {
+    fetch('https://gurudevinformatics.com/fetch/tA.php', {
       method: 'POST',
       headers: { "Content-type": "application/x-www-form-urlencoded"},
       body: ta

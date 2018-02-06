@@ -123,7 +123,7 @@ export default class Pod extends Component{
     handleSubmit = async (evt) => {
       const {pod} = this.state;
       let p =JSON.stringify(pod);
-      fetch('http://localhost:81/fetch/podPush.php', {
+      fetch('https://gurudevinformatics.com/fetch/podPush.php', {
           method: 'POST',
           headers: { "Content-type": "application/x-www-form-urlencoded"},
           body: p
